@@ -63,12 +63,12 @@ declare namespace Component {
         [hookName: string]: (params: any) => void;
     }
 
-    interface TemplateScope<AppState = {}> {
+    interface TemplateScope<Attributes = {}, AppState = {}> {
         /** AppState of the root panel component */
         $app: AppState;
 
         /** Attributes parsed from component's html attributes using attrsSchema */
-        $attrs: {[attr: string]: any};
+        $attrs: Attributes;
 
         /** A reference to the component itself */
         $component: WebComponent;
@@ -77,9 +77,9 @@ declare namespace Component {
         $helpers: Helpers;
     }
 
-    interface ConfigOptions<State, AppState> {
+    interface ConfigOptions<State, Attributes, AppState> {
         /** Function transforming state object to virtual dom tree */
-        template(scope: (TemplateScope<AppState> & State)): VNode;
+        template(scope: (TemplateScope<Attributes, AppState> & State)): VNode;
 
         /** Component-specific Shadow DOM stylesheet */
         css?: string;
@@ -123,9 +123,9 @@ declare namespace Component {
     }
 }
 
-type ConfigOptions<State, AppState> = Component.ConfigOptions<State, AppState>;
+type ConfigOptions<State, Attributes, AppState> = Component.ConfigOptions<State, Attributes, AppState>;
 
-export class Component<State, AppState = {}> extends WebComponent {
+  export class Component<State, Attributes = {}, AppState = {}> extends WebComponent {
     /**
      * Attributes schema that defines the component's html attributes and their types
      * Panel auto parses attribute changes into this.attrs object and $attrs template helper
@@ -133,7 +133,7 @@ export class Component<State, AppState = {}> extends WebComponent {
     static attrsSchema: {[attr: string]: (Component.AttrSchema | Component.AttrType)};
 
     /** Attributes parsed from component's html attributes using attrsSchema */
-    attrs: {[attr: string]: any};
+    attrs: Attributes;
 
     /** State object to share with nested descendant components */
     appState: AppState;
@@ -142,13 +142,13 @@ export class Component<State, AppState = {}> extends WebComponent {
     state: State;
 
     /** Defines standard component configuration */
-    config: ConfigOptions<State, AppState>;
+    config: ConfigOptions<State, Attributes, AppState>;
 
     /**
      * Template helper functions defined in config object, and exposed to template code as $helpers.
      * This getter uses the component's internal config cache.
      */
-    helpers: ConfigOptions<State, AppState>['helpers'];
+    helpers: ConfigOptions<State, Attributes, AppState>['helpers'];
 
     /**
      * For use inside view templates, to create a child Panel component nested under this
@@ -166,7 +166,7 @@ export class Component<State, AppState = {}> extends WebComponent {
      * Fetches a value from the component's configuration map (a combination of
      * values supplied in the config() getter and defaults applied automatically).
      */
-    getConfig<K extends keyof ConfigOptions<State, AppState>>(key: K): ConfigOptions<State, AppState>[K];
+    getConfig<K extends keyof ConfigOptions<State, Attributes, AppState>>(key: K): ConfigOptions<State, Attributes, AppState>[K];
 
     /**
      * Executes the route handler matching the given URL fragment, and updates
@@ -176,13 +176,13 @@ export class Component<State, AppState = {}> extends WebComponent {
 
     /** Run a user-defined hook with the given parameters */
     runHook: (
-        hookName: keyof ConfigOptions<State, AppState>['hooks'],
+        hookName: keyof ConfigOptions<State, Attributes, AppState>['hooks'],
         options: {cascade: boolean, exclude: Component<any, any>},
         params: any,
     ) => void;
 
     /** Sets a value in the component's configuration map after element initialization */
-    setConfig<K extends keyof ConfigOptions<State, AppState>>(key: K, val: ConfigOptions<State, AppState>[K]): void;
+    setConfig<K extends keyof ConfigOptions<State, Attributes, AppState>>(key: K, val: ConfigOptions<State, Attributes, AppState>[K]): void;
 
     /**
      * To be overridden by subclasses, defining conditional logic for whether
