@@ -123,7 +123,7 @@ export interface AttrSchema {
   /** Possible values of an attribute. e.g ['primary', 'secondary'] */
   enum?: Array<string>;
 
-  /** Output deprecatd attribute console warning if defined e.g 'use xyz instead' */
+  /** When setAttribute is invoked, console.warn that attr is deprecated e.g 'use xyz instead' */
   deprecatedMsg?: string;
 }
 
@@ -138,9 +138,6 @@ export class Component<State, AppState = {}, App = unknown> extends WebComponent
    * Panel auto parses attribute changes into this.attrs object and $attrs template helper
    */
   static attrsSchema: {[attr: string]: (string | AttrSchema )};
-
-  /** Attributes parsed from component's html attributes using attrsSchema */
-  attrs: {[attr: string]: any};
 
   /** A reference to the top-level component */
   app: App;
@@ -169,6 +166,9 @@ export class Component<State, AppState = {}, App = unknown> extends WebComponent
   // TODO: Figure out better static typing for Attrs
   /** Get attribute value, throw error if not defined in schema */
   attr(attr: string): any;
+
+  /** Attributes parsed from component's html attributes using attrsSchema */
+  attrs(): {[attr: string]: any};
 
   /**
    * For use inside view templates, to create a child Panel component nested under this

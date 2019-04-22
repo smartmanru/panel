@@ -156,7 +156,7 @@ describe(`Server-side component renderer`, function() {
     el.setAttribute(`json-attr`, `{"foo": not %%^ json`);
     el.connectedCallback();
 
-    expect(el.attrs).to.deep.equal({
+    expect(el.attrs()).to.deep.equal({
       'str-attr': `💩🤒🤢☠️ -> 👻🎉💐🎊😱😍`,
       'bool-attr': true,
       'number-attr': null,

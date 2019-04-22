@@ -213,7 +213,7 @@ describe(`Simple Component instance with attrsSchema`, function() {
   });
 
   it(`updates attrs`, function() {
-    expect(el.attrs).to.deep.equal({
+    expect(el.attrs()).to.deep.equal({
       'str-attr': `world`,
       'bool-attr': false,
       'number-attr': 0,
@@ -227,7 +227,7 @@ describe(`Simple Component instance with attrsSchema`, function() {
     el.setAttribute(`number-attr`, `500843`);
     el.setAttribute(`json-attr`, `{"foo": "bae"}`);
 
-    expect(el.attrs).to.deep.equal({
+    expect(el.attrs()).to.deep.equal({
       'str-attr': `💩🤒🤢☠️ -> 👻🎉💐🎊😱😍`,
       'bool-attr': false,
       'number-attr': 500843,
@@ -266,13 +266,13 @@ describe(`Simple Component instance with attrsSchema`, function() {
 
   it(`has default attrs present after createElement`, function() {
     el = document.createElement(`attrs-reflection-app`);
-    expect(el.attrs).to.deep.equal({
+    expect(el.attrs()).to.deep.equal({
       'str-attr': `hello`,
       'bool-attr': false,
       'number-attr': 0,
       'json-attr': null,
     });
-    // _config is initialised in constructor. defaultState should be able to access el.attrs
+    // _config is initialised in constructor. defaultState should be able to access el.attrs()
     expect(el._config.defaultState.str).to.equal(`hello`);
   });
 });

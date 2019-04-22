@@ -25,12 +25,9 @@ export class AttrsReflectionApp extends Component {
 
   get config() {
     return {
-      template: scope => h(`div`, {class: {'attrs-reflection-app': true}}, [
-        h(`p`, `str-attr: ${JSON.stringify(scope.$attr(`str-attr`))}`),
-        h(`p`, `bool-attr: ${JSON.stringify(scope.$attr(`bool-attr`))}`),
-        h(`p`, `number-attr: ${JSON.stringify(scope.$attr(`number-attr`))}`),
-        h(`p`, `json-attr: ${JSON.stringify(scope.$attr(`json-attr`))}`),
-      ]),
+      template: scope => h(`div`, {class: {'attrs-reflection-app': true}},
+        Object.keys(scope.$component.attrs()).map(attr => h(`p`, `${attr}: ${JSON.stringify(scope.$attr(attr))}`)),
+      ),
       defaultState: {
         str: this.attr(`str-attr`),
       },
