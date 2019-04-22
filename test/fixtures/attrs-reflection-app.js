@@ -26,10 +26,10 @@ export class AttrsReflectionApp extends Component {
   get config() {
     return {
       template: scope => h(`div`, {class: {'attrs-reflection-app': true}},
-        Object.entries(scope.$attrs).map(([attr, val]) => h(`p`, `${attr}: ${JSON.stringify(val)}`)),
+        Object.entries(scope.$component.attrs).map(([attr, val]) => h(`p`, `${attr}: ${JSON.stringify(val)}`)),
       ),
       defaultState: {
-        str: this.attrs[`str-attr`],
+        str: this.attr(`str-attr`),
       },
     };
   }
