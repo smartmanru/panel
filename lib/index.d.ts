@@ -122,6 +122,9 @@ export interface AttrSchema {
 
   /** Possible values of an attribute. e.g ['primary', 'secondary'] */
   enum?: Array<string>;
+
+  /** Output deprecatd attribute console warning if defined e.g 'use xyz instead' */
+  deprecatedMsg?: string;
 }
 
 type ConfigOptions<State, AppState> = Component.ConfigOptions<State, AppState>;
@@ -162,6 +165,10 @@ export class Component<State, AppState = {}, App = unknown> extends WebComponent
    * This getter uses the component's internal config cache.
    */
   helpers: ConfigOptions<State, AppState>['helpers'];
+
+  // TODO: Figure out better static typing for Attrs
+  /** Get attribute value, throw error if not defined in schema */
+  attr(attr: string): any;
 
   /**
    * For use inside view templates, to create a child Panel component nested under this
