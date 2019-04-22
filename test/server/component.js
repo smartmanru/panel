@@ -131,12 +131,10 @@ describe(`Server-side component renderer`, function() {
     el.setAttribute(`number-attr`, `500843`);
     el.setAttribute(`json-attr`, `{"foo": "bae"}`);
 
-    expect(el.attrs).to.deep.equal({
-      'str-attr': `world`,
-      'bool-attr': false,
-      'number-attr': 500843,
-      'json-attr': {foo: `bae`},
-    });
+    expect(el.attr(`str-attr`)).to.equal(`world`);
+    expect(el.attr(`bool-attr`)).to.equal(false);
+    expect(el.attr(`number-attr`)).to.equal(500843);
+    expect(el.attr(`json-attr`)).to.deep.equal({foo: `bae`});
 
     await nextAnimationFrame();
 
@@ -179,16 +177,7 @@ describe(`Server-side component renderer`, function() {
 
   it(`throws error for invalid attr access`, async function() {
     const el = new AttrsReflectionApp();
-    el.setAttribute(`str-attr`, `world`);
-    el.setAttribute(`bool-attr`, `false`);
-    el.setAttribute(`number-attr`, `500843`);
-    el.setAttribute(`json-attr`, `{"foo": "bae"}`);
     el.connectedCallback();
-
-    expect(el.attr(`str-attr`)).to.equal(`world`);
-    expect(el.attr(`bool-attr`)).to.equal(false);
-    expect(el.attr(`number-attr`)).to.equal(500843);
-    expect(el.attr(`json-attr`)).to.deep.equal({foo: `bae`});
 
     expect(() => el.attr(`bad-attr`)).to.throw(
       `attr 'bad-attr' is not defined in attrSchema`
